@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,10 +50,12 @@ public class UserService implements UserDetailsService {
         user.setName(regUserDto.getName());
         user.setAddress(regUserDto.getAddress());
         user.setContactPerson(regUserDto.getContactPerson());
-        user.setCreatedAt(regUserDto.getCreatedAt());
+        user.setWorkTime(regUserDto.getWorkTime());
+        user.setPhone(regUserDto.getContactPhone());
         user.setDescText(regUserDto.getDescText());
         user.setLogotype(regUserDto.getLogotype());
-        user.setBanned(false);
+        user.setBanned(true);
+        user.setCreatedAt((LocalDateTime.now()).toString());
         user.setEmail(regUserDto.getEmail());
         user.setRoles(List.of(roleRepository.findByName(regUserDto.getRole()).get()));
         return userRepository.save(user);
