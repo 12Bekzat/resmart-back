@@ -37,7 +37,7 @@ public class User {
     private String workTime;
     private String createdAt;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

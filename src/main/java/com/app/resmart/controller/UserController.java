@@ -109,6 +109,7 @@ public class UserController {
 
     @PostMapping("/edit")
     public ResponseEntity<?> editMe(@RequestBody UserDto editDto) {
+        System.out.println(editDto);
         Optional<User> byUsername = userService.findByUsername(String.valueOf(editDto.getUsername()));
 
         if (byUsername.isPresent()) {
@@ -127,7 +128,7 @@ public class UserController {
             return ResponseEntity.ok(new AppError(200, "Ok!"));
         }
 
-        return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "User not found!"),
+        return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "User not found!"),
                 HttpStatus.UNAUTHORIZED);
 
     }
@@ -142,9 +143,9 @@ public class UserController {
             user.setContactPerson(editDto.getContactPerson());
             user.setPhone(editDto.getPhone());
             user.setLogotype(editDto.getLogotype());
-            user.setEmail(editDto.getEmail());
             user.setWorkTime(editDto.getWorkTime());
             user.setAddress(editDto.getAddress());
+            user.setDescText(editDto.getDescText());
 
             userService.saveUser(user);
 
@@ -201,27 +202,50 @@ public class UserController {
         List<User> users = userService.findAll();
 
         List<UserDto> userDtos = users.stream()
-        .filter((item) -> {
-            return !item.getUsername().equals("admin");
-        }).map((item) -> {
-            return new UserDto(
-                item.getId(),
-                item.getUsername(),
-                item.getPassword(),
-                item.getEmail(),
-                item.isBanned(),
-                item.getContactPerson(),
-                item.getPhone(),
-                item.getName(),
-                item.getAddress(),
-                item.getDescText(),
-                item.getLogotype(),
-                item.getWorkTime(),
-                item.getCreatedAt(),
-                null, item.getRoles().toString());
-        }).toList();
-        
+                .filter((item) -> {
+                    return !item.getUsername().equals("admin");
+                }).map((item) -> {
+                    return new UserDto(
+                            item.getId(),
+                            item.getUsername(),
+                            item.getPassword(),
+                            item.getEmail(),
+                            item.isBanned(),
+                            item.getContactPerson(),
+                            item.getPhone(),
+                            item.getName(),
+                            item.getAddress(),
+                            item.getDescText(),
+                            item.getLogotype(),
+                            item.getWorkTime(),
+                            item.getCreatedAt(),
+                            null, item.getRoles().toString());
+                }).toList();
+
         return ResponseEntity.ok(userDtos);
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> getUsers(@PathVariable(name = "id") Long id) {
+        User user = userService.findById(id).get();
+
+        UserDto userDto = new UserDto(
+                user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmail(),
+                user.isBanned(),
+                user.getContactPerson(),
+                user.getPhone(),
+                user.getName(),
+                user.getAddress(),
+                user.getDescText(),
+                user.getLogotype(),
+                user.getWorkTime(),
+                user.getCreatedAt(),
+                null, user.getRoles().toString());
+
+        return ResponseEntity.ok(userDto);
     }
 
     @GetMapping("/users/wait")
@@ -232,22 +256,22 @@ public class UserController {
             return item.isBanned() && !item.getUsername().equals("admin");
         }).map((item) -> {
             return new UserDto(
-                item.getId(),
-                item.getUsername(),
-                item.getPassword(),
-                item.getEmail(),
-                item.isBanned(),
-                item.getContactPerson(),
-                item.getPhone(),
-                item.getName(),
-                item.getAddress(),
-                item.getDescText(),
-                item.getLogotype(),
-                item.getWorkTime(),
-                item.getCreatedAt(),
-                null, item.getRoles().toString());
+                    item.getId(),
+                    item.getUsername(),
+                    item.getPassword(),
+                    item.getEmail(),
+                    item.isBanned(),
+                    item.getContactPerson(),
+                    item.getPhone(),
+                    item.getName(),
+                    item.getAddress(),
+                    item.getDescText(),
+                    item.getLogotype(),
+                    item.getWorkTime(),
+                    item.getCreatedAt(),
+                    null, item.getRoles().toString());
         }).toList();
-        
+
         return ResponseEntity.ok(userDtos);
     }
 
@@ -259,22 +283,22 @@ public class UserController {
             return !item.isBanned() && !item.getUsername().equals("admin");
         }).map((item) -> {
             return new UserDto(
-                item.getId(),
-                item.getUsername(),
-                item.getPassword(),
-                item.getEmail(),
-                item.isBanned(),
-                item.getContactPerson(),
-                item.getPhone(),
-                item.getName(),
-                item.getAddress(),
-                item.getDescText(),
-                item.getLogotype(),
-                item.getWorkTime(),
-                item.getCreatedAt(),
-                null, item.getRoles().toString());
+                    item.getId(),
+                    item.getUsername(),
+                    item.getPassword(),
+                    item.getEmail(),
+                    item.isBanned(),
+                    item.getContactPerson(),
+                    item.getPhone(),
+                    item.getName(),
+                    item.getAddress(),
+                    item.getDescText(),
+                    item.getLogotype(),
+                    item.getWorkTime(),
+                    item.getCreatedAt(),
+                    null, item.getRoles().toString());
         }).toList();
-        
+
         return ResponseEntity.ok(userDtos);
     }
 

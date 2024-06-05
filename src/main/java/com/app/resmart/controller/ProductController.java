@@ -34,7 +34,7 @@ public class ProductController {
         List<ProductDto> productDtos = products.stream().map((item) -> {
             return new ProductDto(item.getId(), item.getName(),
                     item.getPrice(), item.getDiscount(), item.getExpiredDate(), item.getCount(), item.getCategory(),
-                    item.getImageUrl(),
+                    item.getImageUrl(), item.isDeleted(),
                     null);
         }).toList();
 
@@ -48,7 +48,7 @@ public class ProductController {
         List<ProductDto> productDtos = user.getProducts().stream().map((item) -> {
             return new ProductDto(item.getId(), item.getName(),
                     item.getPrice(), item.getDiscount(), item.getExpiredDate(), item.getCount(), item.getCategory(),
-                    item.getImageUrl(),
+                    item.getImageUrl(), item.isDeleted(),
                     null);
         }).toList();
 
@@ -61,7 +61,7 @@ public class ProductController {
 
         ProductDto productDto = new ProductDto(item.getId(), item.getName(),
                 item.getPrice(), item.getDiscount(), item.getExpiredDate(), item.getCount(), item.getCategory(),
-                item.getImageUrl(),
+                item.getImageUrl(), item.isDeleted(),
                 item.getReviews().stream().map((review) -> {
                     return new ReviewDto(review.getId(), review.getComment(), review.getRate(),
                             review.getUser().getId(), review.getUser().getUsername());
@@ -78,6 +78,7 @@ public class ProductController {
         product.setName(productDto.getName());
         product.setPrice(productDto.getPrice());
         product.setDiscount(productDto.getDiscount());
+        product.setDeleted(false);
         product.setExpiredDate(productDto.getExpiredDate());
         product.setCount(productDto.getCount());
         product.setCategory(productDto.getCategory());
@@ -92,7 +93,11 @@ public class ProductController {
 
     @PostMapping("/products/{pId}/remove")
     public ResponseEntity<?> removeProduct(@PathVariable Long pId) {
-        productRepo.deleteById(pId);
+        Product product = productRepo.findById(pId).get();
+
+        product.setDeleted(true);
+
+        productRepo.save(product);
 
         return ResponseEntity.ok(new AppError(200, "Successfully added!"));
     }
@@ -108,6 +113,8 @@ public class ProductController {
         product.setCount(productDto.getCount());
         product.setCategory(productDto.getCategory());
         product.setImageUrl(productDto.getImageUrl());
+
+        productRepo.save(product);
         
         return ResponseEntity.ok(new AppError(200, "Successfully added!"));
     }

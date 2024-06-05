@@ -21,6 +21,7 @@ public class ProductDto {
     private int count;
     private String category;
     private String imageUrl;
+    private boolean deleted;
 
     private List<ReviewDto> reviews;
 }

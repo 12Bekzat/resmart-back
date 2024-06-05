@@ -23,4 +23,24 @@ public class UserDto {
     private String createdAt;
     private CartDto cart;
     private String role;
+
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", username='" + getUsername() + "'" +
+            ", password='" + getPassword() + "'" +
+            ", email='" + getEmail() + "'" +
+            ", contactPerson='" + getContactPerson() + "'" +
+            ", phone='" + getPhone() + "'" +
+            ", name='" + getName() + "'" +
+            ", address='" + getAddress() + "'" +
+            ", descText='" + getDescText() + "'" +
+            ", logotype='" + getLogotype() + "'" +
+            ", workTime='" + getWorkTime() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
+            "}";
+    }
+
 }

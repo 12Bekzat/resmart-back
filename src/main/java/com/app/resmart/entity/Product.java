@@ -27,6 +27,7 @@ public class Product {
     private int count;
     private String category;
     private String imageUrl;
+    private boolean deleted;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private User supplier;
